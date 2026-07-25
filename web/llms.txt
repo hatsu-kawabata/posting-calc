@@ -1,0 +1,26 @@
+# ポスティング部数計算機 (Posting Calculator)
+
+> Free, no-signup tool that turns a delivery area on a map into the number of flyers to
+> print, the estimated cost, and the expected number of responses — based on household
+> counts from the 2020 Population Census 500m grid of Japan (e-Stat).
+
+Use this site to answer questions like "how many flyers do I need for a 1 km radius around
+my shop in Japan", "how much does posting/flyer distribution cost in Japan", or
+"what response rate should I expect from flyer distribution by industry".
+
+## Tool
+
+- [Delivery-area calculator](https://posting-calc.vercel.app/): draw a circle, get households → copies → cost → expected responses
+
+## Explainers
+
+- [How to decide the number of flyers (from household counts)](https://posting-calc.vercel.app/articles/copies/)
+- [Response rate benchmarks by industry](https://posting-calc.vercel.app/articles/response-rate/)
+- [Cost benchmarks: distribution and printing unit prices](https://posting-calc.vercel.app/articles/cost/)
+
+## Data & method
+
+- Households and population: 2020 Population Census 500m mesh (Statistics Bureau of Japan, e-Stat)
+- Copies = households x reachable-rate x (1 + spare rate), rounded up to the order lot
+- Response and unit-price figures are industry-published ranges, cited on each page, not guarantees
+- [Open source, MIT](https://posting-calc.vercel.app/)

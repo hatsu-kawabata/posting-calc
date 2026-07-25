@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ポスティングの部数の決め方 — 世帯数から逆算する | ポスティング部数計算機</title>
+<meta name="description" content="チラシを何部刷るかは「配りたいエリアに何世帯あるか」から決まります。国勢調査の世帯数を使った部数の逆算手順と、予備率・配布可能率の考え方を解説します。">
+<link rel="canonical" href="https://posting-calc.vercel.app/articles/copies/">
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#0b0b0b;background:#fcfcfb;max-width:760px;margin:0 auto;padding:20px 16px;line-height:1.8}
+h1{font-size:24px;line-height:1.4;margin:8px 0 16px}
+h2{font-size:17px;margin:28px 0 8px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}
+th,td{border-bottom:1px solid #e1e0d9;padding:7px 8px;text-align:right}
+th:first-child,td:first-child{text-align:left}
+.cta{display:inline-block;background:#2a78d6;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;margin:14px 0}
+.muted{color:#898781;font-size:12.5px}
+.box{border:1px solid #e1e0d9;border-radius:10px;padding:14px 16px;margin:24px 0;background:#fff}
+ul{padding-left:20px}
+a{color:#2a78d6}
+</style>
+</head>
+<body>
+<p class="muted"><a href="https://posting-calc.vercel.app/">ポスティング部数計算機</a> › <a href="https://posting-calc.vercel.app/articles/">解説</a></p>
+<h1>ポスティングの部数の決め方 — 世帯数から逆算する</h1>
+<p>ポスティングで最初に決まらないのが部数です。「とりあえず5,000部」で発注すると、
+配り切れずに余るか、エリアの半分で尽きるかのどちらかになります。部数は本来
+<strong>「配りたい範囲に何世帯あるか」から逆算するもの</strong>で、その世帯数は公開データで分かります。</p>
+
+<h2>手順は3つだけ</h2>
+<ol>
+<li><strong>配布範囲を決める</strong>（店舗から半径◯km、この町とこの町、など）</li>
+<li><strong>その範囲の世帯数を数える</strong>（国勢調査の500mメッシュ統計を円で集計する）</li>
+<li><strong>世帯数 × 配布可能率 × (1 + 予備率)</strong> を発注ロット単位に切り上げる</li>
+</ol>
+<p><a href="/">ポスティング部数計算機</a>は、この3ステップの2と3を地図上で行うツールです。
+地図をクリックして半径を決めると、圏内の世帯数と必要部数がそのまま出ます。</p>
+
+<h2>配布可能率 — 世帯数がそのまま配布数にならない理由</h2>
+<p>国勢調査の世帯数は「そこに住んでいる世帯の数」であって「投函できるポストの数」ではありません。
+オートロックのマンション、チラシお断りの掲示、長期不在などで、実際に投函できる数は下回ります。
+どれだけ下回るかは建物構成と業者の方針で変わるため、計算機では既定値を100%（＝世帯数そのまま）にして、
+<strong>自分の見込みで下げる</strong>形にしています。都市部の集合住宅が多いエリアで安全側に見るなら
+80〜90%程度から始めて、実配布実績が出たら自分の数字に置き換えるのが確実です。</p>
+
+<h2>予備率 — 刷る部数は配る部数より少し多い</h2>
+<p>配布中の破損・汚損、配布員への予備渡し、営業用の手持ち分があるため、印刷部数は配布部数より数%多く用意します。
+計算機の既定は5%です。なお<strong>配布費は「配った部数」、印刷費は「刷った部数」</strong>にかかるので、
+費用計算ではこの2つを分けて扱う必要があります。</p>
+
+<h2>エリアを広げるべきか、密度を上げるべきか</h2>
+<p>同じ予算なら「広く1回」と「狭く2回」が選べます。反響率は接触回数で上がる傾向があるとされる一方、
+商圏の外に配っても来店距離の壁があります。<strong>まず商圏の内側を厚く、次に外側へ</strong>が原則で、
+その「商圏の内側」がどこまでかは、円を動かして世帯数の増え方を見ると判断しやすくなります。
+半径を1.5倍にすると面積は約2.25倍、世帯数もおおむねそれに近い増え方をするので、費用も同じ勢いで増えます。</p>
+
+<h2>次に読む</h2>
+<ul>
+<li><a href="/articles/response-rate/">ポスティングの反響率の目安 — 業種別の相場と読み方</a></li>
+<li><a href="/articles/cost/">ポスティングの費用相場 — 配布単価と印刷単価の内訳</a></li>
+</ul>
+<div class="box">
+<p style="margin:0 0 6px"><strong>📋 配布計画をレポートにしませんか？</strong></p>
+<p style="margin:0 0 10px;font-size:14px">配布エリアの世帯構成を踏まえた配布計画レポートを準備中です。ご興味のある方は事前登録へ（無料・約1分）。</p>
+<a class="cta" style="margin:0" href="https://docs.google.com/forms/d/e/1FAIpQLSeHkgvgKGaOWWRiwzZcz3_GW1XH_SRMBPvOQjVRQeuAeFKUqw/viewform">配布計画レポートの事前登録 →</a>
+</div>
+<p class="muted">出典: 総務省統計局「令和2年国勢調査」500mメッシュ統計（e-Stat 統計GIS）を加工して作成。
+単価・反響率は各社公表の目安であり、実績を保証するものではありません。
+<a href="https://github.com/hatsu-kawabata/posting-calc">オープンソース(MIT)</a></p>
+<script>
+if (/\.vercel\.app$/.test(location.hostname)) {
+  var s = document.createElement("script");
+  s.defer = true;
+  s.src = "/_vercel/insights/script.js";
+  document.head.appendChild(s);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="canonical" href="https://posting-calc.vercel.app/">
+<title>ポスティング部数計算機 — 配布エリアの世帯数から必要部数・費用・想定反響を出す</title>
+<meta name="description" content="地図に配布エリアの円を描くと、圏内世帯数から必要部数・印刷費・配布費・想定反響件数・1件あたり獲得コストがその場で出る無料ツール。登録不要。2020年国勢調査500mメッシュ（e-Stat）ベース。">
+<meta property="og:title" content="ポスティング部数計算機 — 何部刷って、いくらかかって、何件返るか">
+<meta property="og:description" content="配布エリアを地図で囲むだけ。圏内世帯数・必要部数・費用・想定反響件数を無料で試算（登録不要・全国対応）">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://posting-calc.vercel.app/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>ポスティング部数計算機 <span class="beta">β</span></h1>
+  <div class="search" role="search">
+    <input type="search" id="addr" placeholder="住所・地名で移動（例: 世田谷区三軒茶屋 / 新宿駅）" autocomplete="off">
+    <ul id="addrList" class="addr-list" hidden></ul>
+  </div>
+  <p class="tagline">配布したい範囲を地図でクリック → 圏内世帯数から<strong>必要部数・費用・想定反響</strong>を試算（2020年国勢調査 500mメッシュ）</p>
+</header>
+<main class="layout">
+  <div id="map" aria-label="地図"></div>
+  <aside class="panel viz-root">
+    <div class="control">
+      <label for="radius">配布半径 <output id="radiusOut">1.0 km</output></label>
+      <input type="range" id="radius" min="200" max="5000" step="100" value="1000">
+    </div>
+
+    <div id="status" class="status">地図をクリックして配布エリアの中心を指定してください</div>
+
+    <div id="results" hidden>
+      <div class="tiles">
+        <div class="tile hero">
+          <div class="tile-label">配布部数（＝圏内世帯数 × 配布可能率）</div>
+          <div class="tile-value" id="deliverable">–</div>
+        </div>
+        <div class="tile">
+          <div class="tile-label">印刷部数（予備込・ロット単位）</div>
+          <div class="tile-value sm" id="copies">–</div>
+        </div>
+        <div class="tile">
+          <div class="tile-label">概算費用（印刷＋配布）</div>
+          <div class="tile-value sm" id="costTotal">–</div>
+        </div>
+        <div class="tile">
+          <div class="tile-label">想定反響</div>
+          <div class="tile-value sm" id="responses">–</div>
+        </div>
+      </div>
+      <p class="meta" id="breakdown"></p>
+      <p class="meta" id="cpa"></p>
+
+      <h2>試算の前提</h2>
+      <div class="params">
+        <label>業種（反響率の目安）
+          <select id="industry"></select>
+        </label>
+        <label>配布可能率
+          <span class="row"><input type="number" id="coverage" min="10" max="100" step="5"> %</span>
+        </label>
+        <label>予備率
+          <span class="row"><input type="number" id="spare" min="0" max="30" step="1"> %</span>
+        </label>
+        <label>印刷単価
+          <span class="row"><input type="number" id="unitPrint" min="0" max="100" step="0.5"> 円/部</span>
+        </label>
+        <label>配布単価
+          <span class="row"><input type="number" id="unitDeliver" min="0" max="100" step="0.5"> 円/部</span>
+        </label>
+      </div>
+      <p class="note" id="rateNote"></p>
+      <p class="note warn" id="maskNote" hidden></p>
+      <p class="meta" id="shareMeta"></p>
+
+      <div class="cta-box">
+        <p class="cta-head">この配布計画をレポートにしませんか？</p>
+        <p>配布エリアの世帯構成・競合状況を踏まえた配布計画レポートを準備中です。ご興味のある方は事前登録へ（無料・約1分）。</p>
+        <a class="cta" id="ctaLink" href="#" target="_blank" rel="noopener">配布計画レポートの事前登録 →</a>
+      </div>
+    </div>
+
+    <footer class="src">
+      出典: 総務省統計局「令和2年国勢調査」500mメッシュ統計（e-Stat 統計GIS）を加工して作成。
+      秘匿・合算処理のため境界付近は概算値。反響率・単価は業界公表値の目安で、実績を保証するものではありません。
+      <a href="articles/">解説記事</a> / <a href="https://github.com/hatsu-kawabata/posting-calc" target="_blank" rel="noopener">GitHub</a>
+    </footer>
+  </aside>
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module" src="app.js"></script>
+<script>
+// Vercel Web Analytics(本番ホストのみ)
+if (/\.vercel\.app$/.test(location.hostname)) {
+  var s = document.createElement("script");
+  s.defer = true;
+  s.src = "/_vercel/insights/script.js";
+  document.head.appendChild(s);
+}
+</script>
+</body>
+</html>

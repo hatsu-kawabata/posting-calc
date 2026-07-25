@@ -1,0 +1,5 @@
+https://posting-calc.vercel.app/
+https://posting-calc.vercel.app/articles/
+https://posting-calc.vercel.app/articles/copies/
+https://posting-calc.vercel.app/articles/response-rate/
+https://posting-calc.vercel.app/articles/cost/
