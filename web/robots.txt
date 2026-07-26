@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://posting-calc.vercel.app/sitemap.xml
 Sitemap: https://posting-calc.vercel.app/sitemap.txt

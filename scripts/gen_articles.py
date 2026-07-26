@@ -4,12 +4,18 @@
 テンプレート側に計器(Vercel Analytics・canonical・S4 CTA)を最初から入れる
 ——01では手書きのトップにしか計器が無く、生成ページ2196枚が無計測だった(2026-07-25の学習)。
 """
+import datetime
+import hashlib
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
 ART = WEB / "articles"
 SITE = "https://posting-calc.vercel.app"
+# lastmod台帳: url -> {h: 本文ハッシュ, d: 最終更新日}。本文が変わった日だけ日付を進める
+# (毎回ビルド日を打つとlastmodが嘘になる)
+MANIFEST = Path(__file__).resolve().parent / "lastmod.json"
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeHkgvgKGaOWWRiwzZcz3_GW1XH_SRMBPvOQjVRQeuAeFKUqw/viewform"
 
 ANALYTICS = """<script>
@@ -233,6 +239,30 @@ my shop in Japan", "how much does posting/flyer distribution cost in Japan", or
 """
 
 
+def stamp_lastmod(urls: list[str], build_date: str) -> dict[str, str]:
+    """url→lastmod。出力済みHTMLの本文ハッシュが前回と同じURLは前回の日付を保つ。"""
+    prev = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
+    cur = {}
+    for url in urls:
+        rel = url.removeprefix(f"{SITE}/")
+        html = ((WEB / rel / "index.html") if rel else (WEB / "index.html")).read_text()
+        h = hashlib.sha1(html.encode()).hexdigest()[:12]
+        cur[url] = {"h": h, "d": (prev[url]["d"] if url in prev and prev[url].get("h") == h
+                                  else build_date)}
+    MANIFEST.write_text(json.dumps(cur, ensure_ascii=False, sort_keys=True, indent=0) + "\n")
+    print(f"lastmod: {len(cur)} urls / 本文が変わった "
+          f"{sum(1 for v in cur.values() if v['d'] == build_date)}")
+    return {u: v["d"] for u, v in cur.items()}
+
+
+def sitemap_xml(lastmods: dict[str, str]) -> str:
+    entries = "".join(f"<url><loc>{u}</loc><lastmod>{d}</lastmod></url>\n"
+                      for u, d in lastmods.items())
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            f"{entries}</urlset>\n")
+
+
 def main() -> None:
     ART.mkdir(parents=True, exist_ok=True)
     urls = [f"{SITE}/", f"{SITE}/articles/"]
@@ -257,7 +287,11 @@ def main() -> None:
     ))
 
     (WEB / "sitemap.txt").write_text("\n".join(urls) + "\n")
-    (WEB / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.txt\n")
+    # XML版はlastmodを渡せる=再クロールの判断材料が出せる。txt版は既にGSCへ送信済みなので両方置く
+    lastmods = stamp_lastmod(urls, datetime.date.today().isoformat())
+    (WEB / "sitemap.xml").write_text(sitemap_xml(lastmods))
+    (WEB / "robots.txt").write_text(
+        f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\nSitemap: {SITE}/sitemap.txt\n")
     (WEB / "llms.txt").write_text(LLMS_TXT)
     print(f"done: {len(ARTICLES)} articles + index, sitemap {len(urls)} urls")
 
