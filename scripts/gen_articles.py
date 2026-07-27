@@ -294,6 +294,8 @@ def main() -> None:
         f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\nSitemap: {SITE}/sitemap.txt\n")
     (WEB / "llms.txt").write_text(LLMS_TXT)
     print(f"done: {len(ARTICLES)} articles + index, sitemap {len(urls)} urls")
+    # publish-and-ping: デプロイ後に本文が変わったURLだけIndexNowへ通知する
+    print("next: cd web && vercel --prod --yes && python3 scripts/indexnow.py --changed")
 
 
 if __name__ == "__main__":
